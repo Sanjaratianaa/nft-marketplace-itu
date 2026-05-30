@@ -96,7 +96,7 @@ async function mintNFT() {
 
     } catch (err) {
         console.error("Erreur mintNFT :", err);
-        afficherMessage(` Mint échoué : ${err.reason || err.message}`, "erreur");
+        afficherMessage(` Mint échoué : ${formaterErreur(err)}`, "erreur");
     }
 }
 
@@ -138,7 +138,7 @@ async function listerNFT() {
 
     } catch (err) {
         console.error("Erreur listNFT :", err);
-        afficherMessage(` Mise en vente échouée : ${err.reason || err.message}`, "erreur");
+        afficherMessage(` Mise en vente échouée : ${formaterErreur(err)}`, "erreur");
     }
 }
 
@@ -168,7 +168,7 @@ async function acheterNFT(tokenId, prixWei) {
 
     } catch (err) {
         console.error("Erreur buyNFT :", err);
-        afficherMessage(` Achat échoué : ${err.reason || err.message}`, "erreur");
+        afficherMessage(` Achat échoué : ${formaterErreur(err)}`, "erreur");
     }
 }
 
@@ -227,6 +227,36 @@ async function afficherNFTs() {
         console.error("Erreur afficherNFTs :", err);
         galerie.innerHTML = `<p> Impossible de charger les NFTs : ${err.message}</p>`;
     }
+}
+
+function formaterErreur(err) {
+    const msg = err.message || "";
+    
+    // Annulation par l'utilisateur
+    if (err.code === "ACTION_REJECTED" || msg.includes("user rejected") || msg.includes("rejected")) {
+        return "Transaction annulée dans MetaMask.";
+    }
+    
+    // Fonds insuffisants (OutOfFunds)
+    if (msg.includes("OutOfFunds") || msg.includes("insufficient funds") || msg.includes("funds")) {
+        return "Fonds insuffisants ! Assure-toi d'avoir assez de Sepolia ETH pour couvrir le prix du NFT et les frais de gaz.";
+    }
+    
+    // Échec de l'estimation de gaz (souvent dû à des fonds insuffisants ou conditions du contrat non respectées)
+    if (err.code === "CALL_EXCEPTION" || msg.includes("CALL_EXCEPTION")) {
+        if (msg.includes("estimateGas")) {
+            return "Fonds insuffisants ou action non autorisée (ex: achat de son propre NFT ou frais de gaz trop élevés).";
+        }
+        return "Erreur d'exécution blockchain (CALL_EXCEPTION). Vérifie les règles du contrat.";
+    }
+    
+    // Argument invalide
+    if (err.code === "INVALID_ARGUMENT") {
+        return `Argument invalide : ${err.argument || "paramètre incorrect"}.`;
+    }
+
+    // Par défaut
+    return err.reason || err.shortMessage || err.message || "Une erreur inconnue est survenue.";
 }
 
 function afficherMessage(texte, type = "info") {
