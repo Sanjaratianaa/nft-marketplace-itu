@@ -11,512 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <style>
-        /* ==========================================
-           CHARTE GRAPHIQUE & VARIABLES (DESIGN SYSTEM)
-           ========================================== */
-        :root {
-            --bg-color-1: #090615;
-            --bg-color-2: #160f33;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-hover-border: rgba(255, 255, 255, 0.16);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            
-            /* Couleurs d'accentuation néon vibrantes */
-            --accent-purple: #8b5cf6;
-            --accent-purple-glow: rgba(139, 92, 246, 0.4);
-            --accent-cyan: #06b6d4;
-            --accent-cyan-glow: rgba(6, 182, 212, 0.4);
-            --accent-pink: #ec4899;
-            
-            /* Couleurs d'état */
-            --color-info: #0284c7;
-            --color-success: #10b981;
-            --color-error: #ef4444;
-            
-            --font-display: 'Outfit', sans-serif;
-            --font-sans: 'Inter', sans-serif;
-            --transition-speed: 0.3s;
-        }
-
-        /* ==========================================
-           RÉINITIALISATION & STYLES GLOBAUX
-           ========================================== */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: var(--font-sans);
-            background: radial-gradient(circle at 50% 100%, var(--bg-color-2) 0%, var(--bg-color-1) 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        a {
-            color: var(--accent-cyan);
-            text-decoration: none;
-            transition: color var(--transition-speed) ease;
-        }
-
-        a:hover {
-            color: var(--accent-pink);
-            text-decoration: underline;
-        }
-
-        /* Barre de défilement stylisée */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-color-1);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-purple);
-        }
-
-        /* ==========================================
-           CONTENEURS & MISES EN PAGE (LAYOUT)
-           ========================================== */
-        .container {
-            max-width: 1200px;
-            width: 92%;
-            margin: 0 auto;
-            flex: 1;
-        }
-
-        /* Header Premium */
-        header {
-            border-bottom: 1px solid var(--glass-border);
-            background: rgba(9, 6, 21, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 1rem 0;
-        }
-
-        header .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: var(--font-display);
-            font-weight: 800;
-            font-size: 1.6rem;
-            background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo span {
-            background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Hero Banner */
-        .hero {
-            text-align: center;
-            padding: 4rem 0 3rem 0;
-        }
-
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Grille du Dashboard principal */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-        }
-
-        /* ==========================================
-           EFFETS GLASSMORPHISM & BLOCS
-           ========================================== */
-        .glass-panel {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-        }
-
-        .glass-panel:hover {
-            border-color: var(--glass-hover-border);
-            box-shadow: 0 12px 40px 0 rgba(139, 92, 246, 0.05);
-        }
-
-        .glass-panel h2 {
-            font-family: var(--font-display);
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 0.75rem;
-        }
-
-        /* ==========================================
-           COMPOSANTS FORMULAIRES (INPUTS & BOUTONS)
-           ========================================== */
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.85rem 1rem;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            font-size: 0.95rem;
-            transition: all var(--transition-speed) ease;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 0 2px var(--accent-cyan-glow);
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.25);
-        }
-
-        /* Boutons Premium */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.85rem 1.5rem;
-            border-radius: 12px;
-            font-family: var(--font-sans);
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            border: none;
-            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
-            text-align: center;
-            width: 100%;
-        }
-
-        /* Bouton dégradé principal */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-cyan) 100%);
-            color: var(--text-primary);
-            box-shadow: 0 4px 15px var(--accent-purple-glow);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--accent-purple-glow);
-            filter: brightness(1.1);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        /* Bouton MetaMask spécial */
-        .btn-wallet {
-            background: rgba(230, 119, 0, 0.1);
-            border: 1px solid rgba(230, 119, 0, 0.3);
-            color: #ff8f00;
-            width: auto;
-            padding: 0.65rem 1.25rem;
-            border-radius: 50px;
-        }
-
-        .btn-wallet:hover {
-            background: rgba(230, 119, 0, 0.2);
-            border-color: rgba(230, 119, 0, 0.6);
-            transform: scale(1.03);
-        }
-
-        .btn-wallet:disabled {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--glass-border);
-            color: var(--color-success);
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* ==========================================
-           MESSAGES DE NOTIFICATION & STATUT
-           ========================================== */
-        #status-message {
-            margin: 1.5rem auto;
-            max-width: 1200px;
-            width: 92%;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all var(--transition-speed) ease;
-            display: block;
-        }
-
-        #status-message:empty {
-            display: none;
-        }
-
-        /* Styles dynamisés via JavaScript (message-info, message-succes, message-erreur) */
-        .message-info {
-            padding: 1rem;
-            background: rgba(2, 132, 199, 0.1);
-            border: 1px solid rgba(2, 132, 199, 0.3);
-            color: #38bdf8;
-            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.05);
-            animation: slideIn 0.3s ease;
-        }
-
-        .message-succes {
-            padding: 1rem;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #34d399;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.05);
-            animation: slideIn 0.3s ease;
-        }
-
-        .message-erreur {
-            padding: 1rem;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #fca5a5;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.05);
-            animation: slideIn 0.3s ease;
-        }
-
-        /* ==========================================
-           SECTION GALERIE & CARTES NFT
-           ========================================== */
-        .gallery-section {
-            margin-bottom: 5rem;
-        }
-
-        .gallery-section h2 {
-            font-family: var(--font-display);
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        #galerie-nfts {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        /* Carte NFT Premium */
-        .nft-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 1.5rem;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Effet visuel au survol d'un NFT */
-        .nft-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
-            opacity: 0;
-            transition: opacity var(--transition-speed) ease;
-            z-index: 0;
-        }
-
-        .nft-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-purple);
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.15);
-        }
-
-        .nft-card:hover::before {
-            opacity: 1;
-        }
-
-        .nft-card * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .nft-card h3 {
-            font-family: var(--font-display);
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--text-primary) 50%, var(--accent-cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nft-card p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nft-card p strong {
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .nft-card p a {
-            font-weight: 500;
-        }
-
-        .nft-card button {
-            margin-top: 1.25rem;
-            padding: 0.75rem 1rem;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-cyan) 100%);
-            color: var(--text-primary);
-            border: none;
-            font-family: var(--font-sans);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all var(--transition-speed) ease;
-            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
-            width: 100%;
-        }
-
-        .nft-card button:hover {
-            filter: brightness(1.15);
-            box-shadow: 0 6px 18px rgba(6, 182, 212, 0.4);
-            transform: translateY(-1px);
-        }
-
-        .nft-card button:active {
-            transform: translateY(0);
-        }
-
-        /* Message quand galerie vide */
-        #galerie-nfts > p {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-secondary);
-            border: 1px dashed var(--glass-border);
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.01);
-        }
-
-        /* ==========================================
-           FOOTER
-           ========================================== */
-        footer {
-            border-top: 1px solid var(--glass-border);
-            padding: 2rem 0;
-            text-align: center;
-            background: rgba(9, 6, 21, 0.8);
-            margin-top: auto;
-        }
-
-        footer p {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        /* ==========================================
-           ANIMATIONS SVEKTELLES
-           ========================================== */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -541,7 +36,6 @@
     <!-- MAIN APP WRAPPER -->
     <main class="container">
         
-        <!-- SECTION HERO BANNER -->
         <section class="hero">
             <h1>Découvrez l'avenir de l'art <span>numérique</span></h1>
             <p>Mintez, listez et échangez vos actifs uniques en toute sécurité sur le réseau de test Sepolia.</p>
@@ -552,7 +46,7 @@
             
             <!-- FORMULAIRE DE MINT (Création) -->
             <div class="glass-panel">
-                <h2>🎨 Mint un nouveau NFT</h2>
+                <h2>Mint un nouveau NFT</h2>
                 <div class="form-group">
                     <label for="mint-adresse">Adresse du destinataire</label>
                     <input type="text" id="mint-adresse" placeholder="0xabc...123 ou votre adresse" required>
@@ -563,13 +57,13 @@
                 </div>
                 <!-- Bouton Mint requis par app.js -->
                 <button id="btn-mint" class="btn btn-primary">
-                    🔨 Créer (Mint) le NFT
+                    Créer (Mint) le NFT
                 </button>
             </div>
 
             <!-- FORMULAIRE DE MISE EN VENTE (Listing) -->
             <div class="glass-panel">
-                <h2>🛒 Mettre en vente un NFT</h2>
+                <h2>Mettre en vente un NFT</h2>
                 <div class="form-group">
                     <label for="list-tokenid">ID du Token (Token ID)</label>
                     <input type="number" id="list-tokenid" min="0" placeholder="Ex: 0" required>
@@ -580,7 +74,7 @@
                 </div>
                 <!-- Bouton Lister requis par app.js -->
                 <button id="btn-lister" class="btn btn-primary">
-                    💰 Placer sur le marché
+                    Placer sur le marché
                 </button>
             </div>
 
@@ -588,7 +82,7 @@
 
         <!-- SECTION DE LA GALERIE DU MARCHÉ -->
         <section class="gallery-section">
-            <h2>🛍️ NFTs disponibles sur la place de marché</h2>
+            <h2>NFTs disponibles sur la place de marché</h2>
             <!-- Galerie requise par app.js -->
             <div id="galerie-nfts">
                 <p>Connecte MetaMask pour voir les NFTs en vente.</p>
@@ -597,14 +91,12 @@
 
     </main>
 
-    <!-- PIED DE PAGE -->
     <footer>
         <div class="container">
-            <p>&copy; 2026 ITU NFT Marketplace - MBDS Blockchain Project. Développé avec excellence.</p>
+            <p>&copy; 2026 ITU NFT Marketplace - MBDS Blockchain Project.</p>
         </div>
     </footer>
 
-    <!-- INCLUSION DE ETHER.JS ET APP.JS -->
     <!-- Librairie Ethers.js v6 UMD requise pour app.js -->
     <script src="https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js"></script>
     <!-- Script principal de l'application -->

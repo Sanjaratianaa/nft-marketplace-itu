@@ -216,7 +216,7 @@ async function afficherNFTs() {
           <a href="${nft.tokenURI}" target="_blank" rel="noopener">Voir métadonnées</a>
         </p>
         <button onclick="acheterNFT(${nft.tokenId}, ${nft.price}n)">
-          🛒 Acheter pour ${prixEther} ETH
+          Acheter pour ${prixEther} ETH
         </button>
       `;
 
@@ -232,6 +232,18 @@ async function afficherNFTs() {
 function formaterErreur(err) {
     const msg = err.message || "";
     
+    // Extraction des données d'erreur personnalisées (custom errors de Solidity)
+    const errData = err.data || (err.error && err.error.data) || "";
+    
+    // Détection du sélecteur ERC721NonexistentToken (0x7e273289)
+    if (errData.startsWith("0x7e273289")) {
+        return "Le Token ID indiqué n'existe pas encore ! Tu dois d'abord créer (mint) ce NFT avant de pouvoir le mettre en vente.";
+    }
+    // Détection du sélecteur OwnableUnauthorizedAccount (0x118cdaa7)
+    if (errData.startsWith("0x118cdaa7")) {
+        return "Action non autorisée : Seul le propriétaire du contrat (Owner) a le droit d'exécuter cette action.";
+    }
+
     // Annulation par l'utilisateur
     if (err.code === "ACTION_REJECTED" || msg.includes("user rejected") || msg.includes("rejected")) {
         return "Transaction annulée dans MetaMask.";
@@ -245,7 +257,7 @@ function formaterErreur(err) {
     // Échec de l'estimation de gaz (souvent dû à des fonds insuffisants ou conditions du contrat non respectées)
     if (err.code === "CALL_EXCEPTION" || msg.includes("CALL_EXCEPTION")) {
         if (msg.includes("estimateGas")) {
-            return "Fonds insuffisants ou action non autorisée (ex: achat de son propre NFT ou frais de gaz trop élevés).";
+            return "Fonds insuffisants ou action non autorisée (ex: tentative d'achat de son propre NFT, ou Token ID inexistant).";
         }
         return "Erreur d'exécution blockchain (CALL_EXCEPTION). Vérifie les règles du contrat.";
     }
