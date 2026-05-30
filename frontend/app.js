@@ -245,5 +245,14 @@ window.addEventListener("DOMContentLoaded", () => {
     if (window.ethereum) {
         window.ethereum.on("accountsChanged", () => location.reload());
         window.ethereum.on("chainChanged",    () => location.reload());
+
+        // Auto-connexion si le site est déjà autorisé dans MetaMask
+        window.ethereum.request({ method: "eth_accounts" })
+            .then(accounts => {
+                if (accounts.length > 0) {
+                    connecterMetaMask();
+                }
+            })
+            .catch(err => console.error("Erreur auto-connexion :", err));
     }
 });
