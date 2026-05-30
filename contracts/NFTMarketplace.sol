@@ -28,7 +28,7 @@ contract NFTMarketplace is ERC721URIStorage, Ownable {
     constructor() ERC721("ITU NFT", "ITUD") Ownable(msg.sender) {}
 
     // Mint un nouveau NFT
-    function mintNFT(address to, string memory tokenURI) external onlyOwner returns (uint256) {
+    function mintNFT(address to, string memory tokenURI) external returns (uint256) {
         uint256 tokenId = _tokenIdCounter;
         _tokenIdCounter++;
         _safeMint(to, tokenId);
