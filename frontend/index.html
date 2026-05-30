@@ -555,11 +555,11 @@
                 <h2>🎨 Mint un nouveau NFT</h2>
                 <div class="form-group">
                     <label for="mint-adresse">Adresse du destinataire</label>
-                    <input type="text" id="mint-adresse" placeholder="0xabc...123 ou votre adresse">
+                    <input type="text" id="mint-adresse" placeholder="0xabc...123 ou votre adresse" required>
                 </div>
                 <div class="form-group">
                     <label for="mint-tokenuri">URI des métadonnées (Metadata URL)</label>
-                    <input type="url" id="mint-tokenuri" placeholder="https://ipfs.io/ipfs/... ou https://...">
+                    <input type="url" id="mint-tokenuri" placeholder="https://ipfs.io/ipfs/... ou https://..." required>
                 </div>
                 <!-- Bouton Mint requis par app.js -->
                 <button id="btn-mint" class="btn btn-primary">
@@ -572,11 +572,11 @@
                 <h2>🛒 Mettre en vente un NFT</h2>
                 <div class="form-group">
                     <label for="list-tokenid">ID du Token (Token ID)</label>
-                    <input type="number" id="list-tokenid" min="0" placeholder="Ex: 0">
+                    <input type="number" id="list-tokenid" min="0" placeholder="Ex: 0" required>
                 </div>
                 <div class="form-group">
                     <label for="list-prix">Prix de vente (en ETH)</label>
-                    <input type="text" id="list-prix" placeholder="Ex: 0.05">
+                    <input type="text" id="list-prix" placeholder="Ex: 0.05" required>
                 </div>
                 <!-- Bouton Lister requis par app.js -->
                 <button id="btn-lister" class="btn btn-primary">

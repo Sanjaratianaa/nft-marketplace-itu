@@ -64,14 +64,15 @@ async function mintNFT() {
         return;
     }
 
-    // lecture depuis le formulaire HTML
-    const destinataire = document.getElementById("mint-adresse")?.value?.trim();
-    const tokenURI     = document.getElementById("mint-tokenuri")?.value?.trim();
+    // Lecture et validation HTML5 native des inputs
+    const elAdresse = document.getElementById("mint-adresse");
+    const elTokenURI = document.getElementById("mint-tokenuri");
 
-    if (!destinataire || !tokenURI) {
-        afficherMessage(" Remplis l'adresse destinataire et le tokenURI.", "erreur");
-        return;
-    }
+    if (elAdresse && !elAdresse.reportValidity()) return;
+    if (elTokenURI && !elTokenURI.reportValidity()) return;
+
+    const destinataire = elAdresse.value.trim();
+    const tokenURI     = elTokenURI.value.trim();
 
     if (!ethers.isAddress(destinataire)) {
         afficherMessage(" Adresse Ethereum invalide.", "erreur");
@@ -89,6 +90,10 @@ async function mintNFT() {
 
         await afficherNFTs();
 
+        // Effacer les champs du formulaire après succès
+        if (elAdresse) elAdresse.value = "";
+        if (elTokenURI) elTokenURI.value = "";
+
     } catch (err) {
         console.error("Erreur mintNFT :", err);
         afficherMessage(` Mint échoué : ${err.reason || err.message}`, "erreur");
@@ -101,13 +106,15 @@ async function listerNFT() {
         return;
     }
 
-    const tokenId   = document.getElementById("list-tokenid")?.value?.trim();
-    const prixEther = document.getElementById("list-prix")?.value?.trim();
+    // Lecture et validation HTML5 native des inputs
+    const elTokenId = document.getElementById("list-tokenid");
+    const elPrix = document.getElementById("list-prix");
 
-    if (!tokenId || !prixEther) {
-        afficherMessage(" Remplis le tokenId et le prix en ETH.", "erreur");
-        return;
-    }
+    if (elTokenId && !elTokenId.reportValidity()) return;
+    if (elPrix && !elPrix.reportValidity()) return;
+
+    const tokenId   = elTokenId.value.trim();
+    const prixEther = elPrix.value.trim();
 
     try {
         const prixWei = ethers.parseEther(prixEther);
@@ -124,6 +131,10 @@ async function listerNFT() {
         );
 
         await afficherNFTs();
+
+        // Effacer les champs du formulaire après succès
+        if (elTokenId) elTokenId.value = "";
+        if (elPrix) elPrix.value = "";
 
     } catch (err) {
         console.error("Erreur listNFT :", err);
