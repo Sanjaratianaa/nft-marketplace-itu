@@ -1,5 +1,11 @@
 # ITU NFT Marketplace - Projet Blockchain
 
+# Equipe
+- Anjaratiana Sandratriniony Layah
+- RAZAFIMANANTSOA Rota Volamarosoa Anice
+- RAKOTOMANDIMBY Valisoa Mendrika
+- RAJAOHARISAONA Mamison
+
 ## Description
 Une plateforme décentralisée (dApp) premium permettant de créer (minter), lister et acheter des NFTs (ERC-721) sur le réseau de test Sepolia. 
 
