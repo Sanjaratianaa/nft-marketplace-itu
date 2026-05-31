@@ -1,4 +1,4 @@
-const CONTRACT_ADDRESS = "0xf2a1cC8C6F235f22ec4e1CE45f592ee28c7a5242";
+const CONTRACT_ADDRESS = "0x27218831694dd6e604Ec557A427B8768896fB479";
 const ABI = [
     // fonctions principales
     "function mintNFT(address to, string memory tokenURI) external returns (uint256)",
