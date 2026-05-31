@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITU NFT Marketplace | Plateforme Décentralisée Premium</title>
+    <meta name="description" content="Achetez, vendez et mintez des NFTs sur la blockchain Sepolia avec la plateforme décentralisée ITU NFT Marketplace. Connexion MetaMask rapide et sécurisée.">
+    
+    <!-- Google Fonts: Outfit pour les titres, Inter pour le corps de texte -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER DE NAVIGATION -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                ✨ <span>ITU</span> NFT
+            </div>
+            <!-- Bouton MetaMask requis par app.js -->
+            <button id="btn-connexion" class="btn btn-wallet">
+                🦊 Connecter MetaMask
+            </button>
+        </div>
+    </header>
+
+    <!-- ZONE DE MESSAGES ET STATUTS DYNAMIQUES -->
+    <div class="container">
+        <div id="status-message"></div>
+    </div>
+
+    <!-- MAIN APP WRAPPER -->
+    <main class="container">
+        
+        <section class="hero">
+            <h1>Découvrez l'avenir de l'art <span>numérique</span></h1>
+            <p>Mintez, listez et échangez vos actifs uniques en toute sécurité sur le réseau de test Sepolia.</p>
+        </section>
+
+        <!-- DASHBOARD D'INTERACTION BLOCKCHAIN (MINT & LIST) -->
+        <section class="dashboard-grid">
+            
+            <!-- FORMULAIRE DE MINT (Création) -->
+            <div class="glass-panel">
+                <h2>Mint un nouveau NFT</h2>
+                <div class="form-group">
+                    <label for="mint-adresse">Adresse du destinataire</label>
+                    <input type="text" id="mint-adresse" placeholder="0xabc...123 ou votre adresse" required>
+                </div>
+                <div class="form-group">
+                    <label for="mint-tokenuri">URI des métadonnées (Metadata URL)</label>
+                    <input type="url" id="mint-tokenuri" placeholder="https://ipfs.io/ipfs/... ou https://..." required>
+                </div>
+                <!-- Bouton Mint requis par app.js -->
+                <button id="btn-mint" class="btn btn-primary">
+                    Créer (Mint) le NFT
+                </button>
+            </div>
+
+            <!-- FORMULAIRE DE MISE EN VENTE (Listing) -->
+            <div class="glass-panel">
+                <h2>Mettre en vente un NFT</h2>
+                <div class="form-group">
+                    <label for="list-tokenid">ID du Token (Token ID)</label>
+                    <input type="number" id="list-tokenid" min="0" placeholder="Ex: 0" required>
+                </div>
+                <div class="form-group">
+                    <label for="list-prix">Prix de vente (en ETH)</label>
+                    <input type="text" id="list-prix" placeholder="Ex: 0.05" required>
+                </div>
+                <!-- Bouton Lister requis par app.js -->
+                <button id="btn-lister" class="btn btn-primary">
+                    Placer sur le marché
+                </button>
+            </div>
+
+        </section>
+
+        <!-- SECTION DE LA GALERIE DU MARCHÉ -->
+        <section class="gallery-section">
+            <h2>NFTs disponibles sur la place de marché</h2>
+            <!-- Galerie requise par app.js -->
+            <div id="galerie-nfts">
+                <p>Connecte MetaMask pour voir les NFTs en vente.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 ITU NFT Marketplace - MBDS Blockchain Project.</p>
+        </div>
+    </footer>
+
+    <!-- Librairie Ethers.js v6 UMD requise pour app.js -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js"></script>
+    <!-- Script principal de l'application -->
+    <script src="app.js" defer></script>
+
+</body>
+</html>

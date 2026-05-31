@@ -64,14 +64,15 @@ async function mintNFT() {
         return;
     }
 
-    // lecture depuis le formulaire HTML
-    const destinataire = document.getElementById("mint-adresse")?.value?.trim();
-    const tokenURI     = document.getElementById("mint-tokenuri")?.value?.trim();
+    // Lecture et validation HTML5 native des inputs
+    const elAdresse = document.getElementById("mint-adresse");
+    const elTokenURI = document.getElementById("mint-tokenuri");
 
-    if (!destinataire || !tokenURI) {
-        afficherMessage(" Remplis l'adresse destinataire et le tokenURI.", "erreur");
-        return;
-    }
+    if (elAdresse && !elAdresse.reportValidity()) return;
+    if (elTokenURI && !elTokenURI.reportValidity()) return;
+
+    const destinataire = elAdresse.value.trim();
+    const tokenURI     = elTokenURI.value.trim();
 
     if (!ethers.isAddress(destinataire)) {
         afficherMessage(" Adresse Ethereum invalide.", "erreur");
@@ -89,9 +90,13 @@ async function mintNFT() {
 
         await afficherNFTs();
 
+        // Effacer les champs du formulaire après succès
+        if (elAdresse) elAdresse.value = "";
+        if (elTokenURI) elTokenURI.value = "";
+
     } catch (err) {
         console.error("Erreur mintNFT :", err);
-        afficherMessage(` Mint échoué : ${err.reason || err.message}`, "erreur");
+        afficherMessage(` Mint échoué : ${formaterErreur(err)}`, "erreur");
     }
 }
 
@@ -101,13 +106,15 @@ async function listerNFT() {
         return;
     }
 
-    const tokenId   = document.getElementById("list-tokenid")?.value?.trim();
-    const prixEther = document.getElementById("list-prix")?.value?.trim();
+    // Lecture et validation HTML5 native des inputs
+    const elTokenId = document.getElementById("list-tokenid");
+    const elPrix = document.getElementById("list-prix");
 
-    if (!tokenId || !prixEther) {
-        afficherMessage(" Remplis le tokenId et le prix en ETH.", "erreur");
-        return;
-    }
+    if (elTokenId && !elTokenId.reportValidity()) return;
+    if (elPrix && !elPrix.reportValidity()) return;
+
+    const tokenId   = elTokenId.value.trim();
+    const prixEther = elPrix.value.trim();
 
     try {
         const prixWei = ethers.parseEther(prixEther);
@@ -125,9 +132,13 @@ async function listerNFT() {
 
         await afficherNFTs();
 
+        // Effacer les champs du formulaire après succès
+        if (elTokenId) elTokenId.value = "";
+        if (elPrix) elPrix.value = "";
+
     } catch (err) {
         console.error("Erreur listNFT :", err);
-        afficherMessage(` Mise en vente échouée : ${err.reason || err.message}`, "erreur");
+        afficherMessage(` Mise en vente échouée : ${formaterErreur(err)}`, "erreur");
     }
 }
 
@@ -157,7 +168,7 @@ async function acheterNFT(tokenId, prixWei) {
 
     } catch (err) {
         console.error("Erreur buyNFT :", err);
-        afficherMessage(` Achat échoué : ${err.reason || err.message}`, "erreur");
+        afficherMessage(` Achat échoué : ${formaterErreur(err)}`, "erreur");
     }
 }
 
@@ -205,7 +216,7 @@ async function afficherNFTs() {
           <a href="${nft.tokenURI}" target="_blank" rel="noopener">Voir métadonnées</a>
         </p>
         <button onclick="acheterNFT(${nft.tokenId}, ${nft.price}n)">
-          🛒 Acheter pour ${prixEther} ETH
+          Acheter pour ${prixEther} ETH
         </button>
       `;
 
@@ -216,6 +227,48 @@ async function afficherNFTs() {
         console.error("Erreur afficherNFTs :", err);
         galerie.innerHTML = `<p> Impossible de charger les NFTs : ${err.message}</p>`;
     }
+}
+
+function formaterErreur(err) {
+    const msg = err.message || "";
+    
+    // Extraction des données d'erreur personnalisées (custom errors de Solidity)
+    const errData = err.data || (err.error && err.error.data) || "";
+    
+    // Détection du sélecteur ERC721NonexistentToken (0x7e273289)
+    if (errData.startsWith("0x7e273289")) {
+        return "Le Token ID indiqué n'existe pas encore ! Tu dois d'abord créer (mint) ce NFT avant de pouvoir le mettre en vente.";
+    }
+    // Détection du sélecteur OwnableUnauthorizedAccount (0x118cdaa7)
+    if (errData.startsWith("0x118cdaa7")) {
+        return "Action non autorisée : Seul le propriétaire du contrat (Owner) a le droit d'exécuter cette action.";
+    }
+
+    // Annulation par l'utilisateur
+    if (err.code === "ACTION_REJECTED" || msg.includes("user rejected") || msg.includes("rejected")) {
+        return "Transaction annulée dans MetaMask.";
+    }
+    
+    // Fonds insuffisants (OutOfFunds)
+    if (msg.includes("OutOfFunds") || msg.includes("insufficient funds") || msg.includes("funds")) {
+        return "Fonds insuffisants ! Assure-toi d'avoir assez de Sepolia ETH pour couvrir le prix du NFT et les frais de gaz.";
+    }
+    
+    // Échec de l'estimation de gaz (souvent dû à des fonds insuffisants ou conditions du contrat non respectées)
+    if (err.code === "CALL_EXCEPTION" || msg.includes("CALL_EXCEPTION")) {
+        if (msg.includes("estimateGas")) {
+            return "Fonds insuffisants ou action non autorisée (ex: tentative d'achat de son propre NFT, ou Token ID inexistant).";
+        }
+        return "Erreur d'exécution blockchain (CALL_EXCEPTION). Vérifie les règles du contrat.";
+    }
+    
+    // Argument invalide
+    if (err.code === "INVALID_ARGUMENT") {
+        return `Argument invalide : ${err.argument || "paramètre incorrect"}.`;
+    }
+
+    // Par défaut
+    return err.reason || err.shortMessage || err.message || "Une erreur inconnue est survenue.";
 }
 
 function afficherMessage(texte, type = "info") {
@@ -245,5 +298,14 @@ window.addEventListener("DOMContentLoaded", () => {
     if (window.ethereum) {
         window.ethereum.on("accountsChanged", () => location.reload());
         window.ethereum.on("chainChanged",    () => location.reload());
+
+        // Auto-connexion si le site est déjà autorisé dans MetaMask
+        window.ethereum.request({ method: "eth_accounts" })
+            .then(accounts => {
+                if (accounts.length > 0) {
+                    connecterMetaMask();
+                }
+            })
+            .catch(err => console.error("Erreur auto-connexion :", err));
     }
 });
